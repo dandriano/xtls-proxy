@@ -2,7 +2,7 @@ FROM alpine:latest
 
 ARG XRAY_CORE_VERSION=v26.1.23
 ENV SNI=www.twitch.tv 
-ENV SHORT_ID=aabbccdd
+ENV SHORT_ID=abcd1234
 
 RUN apk add --no-cache curl unzip && \
     wget https://github.com/XTLS/Xray-core/releases/download/${XRAY_CORE_VERSION}/Xray-linux-64.zip && \

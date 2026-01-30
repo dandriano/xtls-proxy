@@ -1,7 +1,7 @@
 #!/bin/sh
 LOCKFILE=config/.lockfile
 
-# Update always, for rebuilds
+# Update always, for rebuilds (beware)
 sed -i 's|"dest": ""|"dest": "'"${SNI}"':443"|' config/config.json
 sed -i 's|"serverNames": \[""\]|"serverNames": \["'"${SNI}"'"\]|' config/config.json
 sed -i 's|"shortIds": \["aabbccdd"\]|"shortIds": \["'"${SHORT_ID}"'"\]|' config/config.json
@@ -34,7 +34,7 @@ if [ ! -f "$LOCKFILE" ]; then
   echo "SNI: ${SNI}"
   echo "Short ID: ${SHORT_ID}"
   echo ""
-  echo "Raw connection string:"
+  echo "Connection URL:"
   echo "${VLESS_URL}"
   echo ""
   echo "================================================"

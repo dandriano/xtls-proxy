@@ -38,7 +38,7 @@
           "minClientVer": "",
           "maxClientVer": "",
           "maxTimeDiff": 60000,
-          "shortIds": ["aabbccdd"],
+          "shortIds": ["abcd1234"],
           "fingerprint": "firefox",
           "spiderX": "/"
         }
@@ -73,9 +73,7 @@
         "connIdle": 300,
         "uplinkOnly": 5,
         "downlinkOnly": 5,
-        "handshake": 4,
-        "statsUserUplink": true,
-        "statsUserDownlink": true
+        "handshake": 4
       }
     }
   }
