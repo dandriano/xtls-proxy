@@ -14,6 +14,7 @@ WORKDIR /opt/xray
 
 COPY config.json config/config.json
 COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
 EXPOSE 443
 ENTRYPOINT ["./entrypoint.sh"]
