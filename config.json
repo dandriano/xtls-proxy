@@ -2,18 +2,35 @@
   "log": {
     "loglevel": "warning"
   },
+  "dns": {
+    "servers": [
+      "https://1.1.1.1/dns-query",
+      "localhost"
+    ]
+  },
   "routing": {
     "rules": [
       {
         "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
         "domain": ["geosite:category-ads-all"],
         "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:ru"],
+        "outboundTag": "direct"
       }
     ],
     "domainStrategy": "IPIfNonMatch"
   },
   "inbounds": [
     {
+      "listen": "0.0.0.0",
       "port": 443,
       "protocol": "vless",
       "tag": "vless_tls",
@@ -70,10 +87,10 @@
     },
     "levels": {
       "0": {
-        "connIdle": 300,
+        "connIdle": 180,
         "uplinkOnly": 5,
         "downlinkOnly": 5,
-        "handshake": 4
+        "handshake": 3
       }
     }
   }
