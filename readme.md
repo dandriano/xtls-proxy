@@ -1,6 +1,6 @@
 # XTLS-PROXY
 
-Yet another one dockerized slim proxy setup. For something a little more serious, [see here](https://github.com/gozargah/marzban).
+Yet another one dockerized slim proxy setup. For something a little more serious, see [here](https://github.com/remnawave) and [there](https://github.com/gozargah/marzban).
 
 ## Quick start
 
@@ -11,7 +11,7 @@ Yet another one dockerized slim proxy setup. For something a little more serious
 docker build -t xtls-proxy .
 docker run -d --rm -p 443:443 -e SNI=www.twitch.tv -e SHORT_ID=abcd1234 -v xtls-proxy-cache:/opt/xray/config --name xtls-proxy xtls-proxy
 ```
-4. Check the logs via `docker logs -f xtls-proxy` for connection url (shown once, [see here](/entrypoint.sh#L24-L40)). If there's no log, check `docker ps` for a container existance.
+4. Check the logs via `docker logs -f xtls-proxy` for connection url (shown once, see [here](/entrypoint.sh#L24-L40)). If there's no log, check `docker ps` for a container existance.
 ```
 ================================================
 XTLS-PROXY Configuration:
