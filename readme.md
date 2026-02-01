@@ -1,6 +1,6 @@
 # XTLS-PROXY
 
-Yet another one dockerized slim proxy setup. For something a little more serious, see [here](https://github.com/remnawave) and [there](https://github.com/gozargah/marzban).
+Yet another one dockerized slim proxy setup. For something a little more serious, see [here](https://docs.rw/docs/overview/introduction) and [there](https://github.com/gozargah/marzban).
 
 ## Quick start
 
