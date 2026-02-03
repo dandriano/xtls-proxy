@@ -35,12 +35,7 @@
       "protocol": "vless",
       "tag": "vless_tls",
       "settings": {
-        "clients": [
-          {
-            "id": "",
-            "flow": "xtls-rprx-vision"
-          }
-        ],
+        "clients": [],
         "decryption": "none"
       },
       "streamSettings": {
@@ -55,7 +50,7 @@
           "minClientVer": "",
           "maxClientVer": "",
           "maxTimeDiff": 60000,
-          "shortIds": ["abcd1234"],
+          "shortIds": [""],
           "fingerprint": "firefox",
           "spiderX": "/"
         }

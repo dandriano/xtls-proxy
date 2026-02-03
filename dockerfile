@@ -2,13 +2,13 @@ FROM alpine:latest
 
 ARG XRAY_CORE_VERSION=v26.1.23
 ENV SNI=www.twitch.tv 
-ENV SHORT_ID=abcd1234
+ENV USER_COUNT=1
 
-RUN apk add --no-cache curl unzip && \
+RUN apk add --no-cache bash curl openssl unzip && \
     wget https://github.com/XTLS/Xray-core/releases/download/${XRAY_CORE_VERSION}/Xray-linux-64.zip && \
     mkdir -p /opt/xray && \
     unzip -q Xray-linux-64.zip -d /opt/xray/ && \
-    rm Xray-linux-64.zip
+    apk del unzip && rm Xray-linux-64.zip
 
 WORKDIR /opt/xray
 

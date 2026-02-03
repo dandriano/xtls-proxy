@@ -9,25 +9,22 @@ Yet another one dockerized slim proxy setup. For something a little more serious
 3. Spin up proxy container (urge you to change environment variables as you see fit).
 ```
 docker build -t xtls-proxy .
-docker run -d --rm -p 443:443 -e SNI=www.twitch.tv -e SHORT_ID=abcd1234 -v xtls-proxy-cache:/opt/xray/config --name xtls-proxy xtls-proxy
+docker run -d --rm -p 443:443 -e SNI=www.twitch.tv -e USER_COUNT=1 -v xtls-proxy-cache:/opt/xray/config --name xtls-proxy xtls-proxy
 ```
 4. Check the logs via `docker logs -f xtls-proxy` for connection url (shown once, see [here](/entrypoint.sh#L24-L40)). If there's no log, check `docker ps` for a container existance.
 ```
 ================================================
-XTLS-PROXY Configuration:
+XTLS-PROXY Configuration
 ================================================
-
-Server: <Server IP>
-UUID: <UUID>
+Server IP : <Server IP>
+SNI       : www.twitch.tv
 Public Key: <PUBKEY>
-SNI: www.twitch.tv
-Short ID: abcd1234
 
-Connection URL:
-vless://<UUID>@<Server IP>?type=tcp&security=reality&flow=xtls-rprx-vision&pbk=<PUBKEY>&fp=firefox&sni=www.twitch.tv&sid=abcd1234&spx=%2F#xtls-proxy
+URL #1: vless://<UUID>@<Server IP>:443?type=tcp&security=reality&flow=xtls-rprx-vision&pbk=<PUBKEY>&fp=firefox&sni=www.twitch.tv&sid=<SID>&spx=%2F#xtls-proxy
 
 ================================================
 Xray 26.1.23 (Xray, Penetrates Everything.) 0a42dba (go1.25.6 linux/amd64)
+A unified platform for anti-censorship.
 ```
 5. Paste `vless://` link to a client you like.
 6. ...
