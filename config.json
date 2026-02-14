@@ -4,25 +4,45 @@
   },
   "dns": {
     "servers": [
-      "https://1.1.1.1/dns-query",
+      "https+local://1.1.1.1/dns-query",
+      "8.8.8.8",
+      "8.8.4.4",
       "localhost"
     ]
   },
   "routing": {
     "rules": [
       {
+        "inboundTag": ["dokodemo"],
         "type": "field",
-        "ip": ["geoip:private"],
+        "domain": [
+          "geosite:category-ads-all"
+        ],
         "outboundTag": "block"
       },
       {
+        "inboundTag": ["dokodemo"],
         "type": "field",
-        "domain": ["geosite:category-ads-all"],
+        "protocol": [
+          "bittorrent"
+        ],
         "outboundTag": "block"
       },
       {
+        "inboundTag": ["dokodemo"],
+        "outboundTag": "to_vless"
+      },
+      {
+        "inboundTag": ["vless_tls"],
         "type": "field",
-        "ip": ["geoip:ru"],
+        "ip": [
+          "geoip:private", 
+          "geoip:ru"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "inboundTag": ["vless_tls"],
         "outboundTag": "direct"
       }
     ],
@@ -30,10 +50,26 @@
   },
   "inbounds": [
     {
+      "tag": "dokodemo",
       "listen": "0.0.0.0",
       "port": 443,
-      "protocol": "vless",
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "0.0.0.0",
+        "port": 0,
+        "network": "tcp"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["tls", "http"],
+        "routeOnly": true
+      }
+    },
+    {
       "tag": "vless_tls",
+      "listen": "127.0.0.1",
+      "port": 65432,
+      "protocol": "vless",
       "settings": {
         "clients": [],
         "decryption": "none"
@@ -57,7 +93,7 @@
       },
       "sniffing": {
         "enabled": true,
-        "destOverride": ["http", "tls", "quic"],
+        "destOverride": ["http", "tls"],
         "routeOnly": true
       }
     }
@@ -71,15 +107,18 @@
       }
     },
     {
+      "protocol": "freedom",
+      "tag": "to_vless",
+      "settings": { 
+        "redirect": "127.0.0.1:65432" 
+      }
+    },
+    {
       "protocol": "blackhole",
       "tag": "block"
     }
   ],
   "policy": {
-    "system": {
-      "statsInboundUplink": true,
-      "statsInboundDownlink": true
-    },
     "levels": {
       "0": {
         "connIdle": 180,
