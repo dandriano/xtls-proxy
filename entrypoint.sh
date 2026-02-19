@@ -2,7 +2,8 @@
 LOCKFILE=config/.lockfile
 
 # SNI updates always, for rebuilds (beware)
-sed -i 's|"dest": ""|"dest": "'"${SNI}"':443"|' config/config.json
+sed -i 's|"address": ""|"address": "'"${SNI}"'"|' config/config.json
+sed -i 's|"domain": \[""\]|"domain": \["'"${SNI}"'"\]|' config/config.json
 sed -i 's|"serverNames": \[""\]|"serverNames": \["'"${SNI}"'"\]|' config/config.json
 
 if [ ! -f "$LOCKFILE" ]; then

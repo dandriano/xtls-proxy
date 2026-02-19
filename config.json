@@ -16,12 +16,24 @@
         "inboundTag": ["dokodemo"],
         "type": "field",
         "domain": [
+          ""
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "inboundTag": ["dokodemo"],
+        "outboundTag": "block"
+      },
+      {
+        "inboundTag": ["vless_tls"],
+        "type": "field",
+        "domain": [
           "geosite:category-ads-all"
         ],
         "outboundTag": "block"
       },
       {
-        "inboundTag": ["dokodemo"],
+        "inboundTag": ["vless_tls"],
         "type": "field",
         "protocol": [
           "bittorrent"
@@ -29,14 +41,10 @@
         "outboundTag": "block"
       },
       {
-        "inboundTag": ["dokodemo"],
-        "outboundTag": "to_vless"
-      },
-      {
         "inboundTag": ["vless_tls"],
         "type": "field",
         "ip": [
-          "geoip:private", 
+          "geoip:private",
           "geoip:ru"
         ],
         "outboundTag": "block"
@@ -50,25 +58,27 @@
   },
   "inbounds": [
     {
+      "listen": "127.0.0.1",
       "tag": "dokodemo",
-      "listen": "0.0.0.0",
-      "port": 443,
+      "port": 4431,
       "protocol": "dokodemo-door",
       "settings": {
-        "address": "0.0.0.0",
-        "port": 0,
+        "address": "",
+        "port": 443,
         "network": "tcp"
       },
       "sniffing": {
         "enabled": true,
-        "destOverride": ["tls", "http"],
+        "destOverride": [
+          "tls"
+        ],
         "routeOnly": true
       }
     },
     {
       "tag": "vless_tls",
-      "listen": "127.0.0.1",
-      "port": 65432,
+      "listen": "0.0.0.0",
+      "port": 443,
       "protocol": "vless",
       "settings": {
         "clients": [],
@@ -79,7 +89,7 @@
         "security": "reality",
         "realitySettings": {
           "show": false,
-          "dest": "",
+          "dest": "127.0.0.1:4431",
           "xver": 0,
           "serverNames": [""],
           "privateKey": "",
@@ -104,13 +114,6 @@
       "tag": "direct",
       "settings": {
         "domainStrategy": "UseIP"
-      }
-    },
-    {
-      "protocol": "freedom",
-      "tag": "to_vless",
-      "settings": { 
-        "redirect": "127.0.0.1:65432" 
       }
     },
     {

@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-ARG XRAY_CORE_VERSION=v26.1.23
+ARG XRAY_CORE_VERSION=v26.2.6
 ENV SNI=www.twitch.tv 
 ENV USER_COUNT=1
 
