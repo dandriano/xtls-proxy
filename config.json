@@ -15,9 +15,7 @@
       {
         "inboundTag": ["dokodemo"],
         "type": "field",
-        "domain": [
-          ""
-        ],
+        "domain": [""],
         "outboundTag": "direct"
       },
       {
@@ -27,9 +25,7 @@
       {
         "inboundTag": ["vless_tls"],
         "type": "field",
-        "domain": [
-          "geosite:category-ads-all"
-        ],
+        "domain": ["geosite:category-ads-all"],
         "outboundTag": "block"
       },
       {

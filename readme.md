@@ -9,9 +9,9 @@ Yet another one dockerized slim proxy setup. For something a little more serious
 3. Spin up proxy container (urge you to change environment variables as you see fit).
 ```
 docker build -t xtls-proxy .
-docker run -d --rm -p 443:443 -e SNI=www.twitch.tv -e USER_COUNT=1 -v xtls-proxy-cache:/opt/xray/config --name xtls-proxy xtls-proxy
+docker run -d -p 443:443 -e SNI=www.twitch.tv -e USER_COUNT=1 --restart=always --name xtls-proxy xtls-proxy
 ```
-4. Check the logs via `docker logs -f xtls-proxy` for connection url (shown once, see [here](/entrypoint.sh#L24-L40)). If there's no log, check `docker ps` for a container existance.
+4. Check the logs via `docker logs -f xtls-proxy` for connection url (shown once, see [here](/entrypoint.sh#L48-L55)).
 ```
 ================================================
 XTLS-PROXY Configuration
@@ -29,5 +29,3 @@ A unified platform for anti-censorship.
 5. Paste `vless://` link to a client you like.
 6. ...
 7. Profit.
-
-If anything goes bad, your configuration (pub/priv keys, uuids) is cached in a docker volume and preserved between runs (but [beware](entrypoint.sh#L4-L7)). For clean up use `docker volume rm xtls-proxy-cache`.
