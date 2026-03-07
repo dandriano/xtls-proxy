@@ -9,7 +9,7 @@ Yet another one dockerized slim proxy setup. For something a little more serious
 3. Spin up proxy container (urge you to change environment variables as you see fit).
 ```
 docker build -t xtls-proxy .
-docker run -d -p 443:443 -e SNI=www.twitch.tv -e USER_COUNT=1 --restart=always --name xtls-proxy xtls-proxy
+docker run --restart=unless-stopped -d -p 443:443 -e SNI=www.twitch.tv -e USER_COUNT=1 -v xtls-proxy-config:/opt/xray/config --tmpfs /var/log/xray:size=10m --tmpfs /tmp:size=10m --name xtls-proxy xtls-proxy
 ```
 4. Check the logs via `docker logs -f xtls-proxy` for connection url (shown once, see [here](/entrypoint.sh#L48-L55)).
 ```
