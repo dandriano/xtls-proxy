@@ -39,8 +39,7 @@ if [ ! -f "$LOCKFILE" ]; then
   sed -i 's|"clients": \[[^]]*\]|"clients": '"$clients"'|' config/config.json
   sed -i 's|"shortIds": \[[^]]*\]|"shortIds": '"$shortids"'|' config/config.json
   sed -i 's|"privateKey": ""|"privateKey": "'"${PRIVATE}"'"|' config/config.json
-  sed -i 's|"address": ""|"address": "'"${SNI}"'"|' config/config.json
-  sed -i 's|"domain": \[[^]]*\]|"domain": \["'"${SNI}"'"\]|' config/config.json
+  sed -i 's|"target": ""|"target": "'"${SNI}:443"'"|' config/config.json
   sed -i 's|"serverNames": \[[^]]*\]|"serverNames": \["'"${SNI}"'"\]|' config/config.json
 
   touch "$LOCKFILE"
