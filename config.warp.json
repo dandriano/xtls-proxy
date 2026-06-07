@@ -26,6 +26,11 @@
           "geoip:ru"
         ],
         "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "outboundTag": "warp",
+        "network": "tcp,udp"
       }
     ],
     "domainStrategy": "IPIfNonMatch"
@@ -74,6 +79,23 @@
     {
       "protocol": "blackhole",
       "tag": "block"
+    },
+    {
+      "protocol": "wireguard",
+      "tag": "warp",
+      "settings": {
+        "secretKey": "WARP_PRIVATE_KEY",
+        "address": [
+          "WARP_IPV4",
+          "WARP_IPV6"
+        ],
+        "peers": [
+          {
+            "publicKey": "WARP_PUBLIC_KEY",
+            "endpoint": "WARP_ENDPOINT"
+          }
+        ]
+      }
     }
   ],
   "policy": {

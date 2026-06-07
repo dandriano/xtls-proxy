@@ -1,8 +1,15 @@
 #!/bin/bash
 LOCKFILE=config/.lockfile
+if [ "$USE_WGCF" = "true" ]; then
+  WGCF_PROFILE=config/wgcf-profile.conf
+  CONFIG_FILE=config/config.warp.json
+else
+  CONFIG_FILE=config/config.json
+fi
+
 
 if [ ! -f "$LOCKFILE" ]; then
-  # uuids / short ids
+  # Generate Xray configuration
   ./xray x25519 > config/keys
 
   EXT_IP=$(curl -s https://api.ipify.org || curl -s https://icanhazip.com || echo "unknown")
@@ -36,21 +43,49 @@ if [ ! -f "$LOCKFILE" ]; then
   done
   shortids="$shortids]"
 
-  sed -i 's|"clients": \[[^]]*\]|"clients": '"$clients"'|' config/config.json
-  sed -i 's|"shortIds": \[[^]]*\]|"shortIds": '"$shortids"'|' config/config.json
-  sed -i 's|"privateKey": ""|"privateKey": "'"${PRIVATE}"'"|' config/config.json
-  sed -i 's|"target": ""|"target": "'"${SNI}:443"'"|' config/config.json
-  sed -i 's|"serverNames": \[[^]]*\]|"serverNames": \["'"${SNI}"'"\]|' config/config.json
+  if [ "$USE_WGCF" = "true" ]; then
+    # Generate WARP configuration
+    mkdir -p wgcfconfig
+    cd wgcfconfig
+    wgcf register --accept-tos
+    wgcf generate
+    mv wgcf-profile.conf ../$WGCF_PROFILE
+    cd ..
+    rm -rf wgcfconfig
+
+    WARP_PRIVATE_KEY=$(awk -F'= ' '/PrivateKey/{print $2}' "$WGCF_PROFILE")
+    WARP_IPV4=$(awk -F'= ' '/Address/{print $2}' "$WGCF_PROFILE" | cut -d',' -f1 | tr -d ' ')
+    WARP_IPV6=$(awk -F'= ' '/Address/{print $2}' "$WGCF_PROFILE" | cut -d',' -f2 | tr -d ' ')
+    WARP_PUBLIC_KEY=$(awk -F'= ' '/PublicKey/{print $2}' "$WGCF_PROFILE")
+    WARP_ENDPOINT=$(awk -F'= ' '/Endpoint/{print $2}' "$WGCF_PROFILE")
+    # Force IPv4 right now ...
+    WARP_ENDPOINT="162.159.192.1:2408"
+  fi
+
+  # Do replacements
+  sed -i "s|\"XRAY_CLIENTS\"|${clients}|g" "$CONFIG_FILE"
+  sed -i "s|\"XRAY_SHORT_IDS\"|${shortids}|g" "$CONFIG_FILE"
+  sed -i "s|XRAY_PRIVATE_KEY|${PRIVATE}|g" "$CONFIG_FILE"
+  sed -i "s|XRAY_TARGET|${SNI}:443|g" "$CONFIG_FILE"
+  sed -i "s|\"XRAY_SERVER_NAMES\"|[\"${SNI}\"]|g" "$CONFIG_FILE"
+
+  if [ "$USE_WGCF" = "true" ]; then
+    sed -i "s|WARP_PRIVATE_KEY|${WARP_PRIVATE_KEY}|g" "$CONFIG_FILE"
+    sed -i "s|WARP_IPV4|${WARP_IPV4}|g" "$CONFIG_FILE"
+    sed -i "s|WARP_IPV6|${WARP_IPV6}|g" "$CONFIG_FILE"
+    sed -i "s|WARP_PUBLIC_KEY|${WARP_PUBLIC_KEY}|g" "$CONFIG_FILE"
+    sed -i "s|WARP_ENDPOINT|${WARP_ENDPOINT}|g" "$CONFIG_FILE"
+  fi
 
   touch "$LOCKFILE"
 
-  # Show configuration once
   echo "================================================"
   echo "XTLS-PROXY Configuration"
   echo "================================================"
   echo "Server IP : ${EXT_IP}"
   echo "SNI       : ${SNI}"
   echo "Public Key: ${PUBLIC}"
+  echo "WARP:       ${USE_WGCF}"
   echo ""
 
   for i in "${!UUIDS[@]}"; do
@@ -61,4 +96,4 @@ if [ ! -f "$LOCKFILE" ]; then
   echo "================================================"
 fi
 
-./xray run -config config/config.json
+./xray run -config "$CONFIG_FILE"

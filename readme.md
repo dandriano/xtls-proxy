@@ -4,13 +4,13 @@ Yet another one dockerized slim proxy setup. For something a little more serious
 
 ## Quick start
 
-1. Ssh into your server (of course, there's a git/docker installed already).
-2. `git clone` this repo.
-3. Spin up proxy container (urge you to change environment variables as you see fit).
+1. Ssh into your server.
+2. Get setup script.
 ```
-docker build -t xtls-proxy .
-docker run -d -p 443:443 -e SNI=www.twitch.tv -e USER_COUNT=1 --restart=unless-stopped --tmpfs /var/log/xray:size=5m --tmpfs /tmp:size=5m --name xtls-proxy xtls-proxy
+wget -O run.sh https://raw.githubusercontent.com/dandriano/xtls-proxy/master/run.sh
+chmod +x run.sh
 ```
+3. Spin up proxy container via setup script `./run.sh` (it will promt for SNI/user count/etc and install docker/git if needed).
 4. Check the logs via `docker logs -f xtls-proxy` for connection url (see [here](/entrypoint.sh#L48-L55)).
 ```
 ================================================
@@ -29,3 +29,8 @@ A unified platform for anti-censorship.
 5. Paste `vless://` link to a client you like.
 6. ...
 7. Profit.
+
+## WARP
+
+TODO: Write something.
+Rigth now this option routes all traffic thru Cloudflare network (see [here](/config.warp.json#L30-L34)).
