@@ -32,5 +32,6 @@ A unified platform for anti-censorship.
 
 ## WARP
 
-TODO: Write something.
-Rigth now this option routes all traffic thru Cloudflare network (see [here](/config.warp.json#L30-L34)).
+In case you're unable to guarantee proper client app configuration for direct access to domestic resources (or in case of censorship from the other side).
+Rigth now this option routes all traffic thru Cloudflare network (see [here](/config.warp.json#L30-L34)), but configure as you see fit.
+Also worth mentioning [wgcf](https://github.com/ViRb3/wgcf).
