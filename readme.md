@@ -11,7 +11,7 @@ wget -O run.sh https://raw.githubusercontent.com/dandriano/xtls-proxy/master/run
 chmod +x run.sh
 ```
 3. Spin up proxy container via setup script `./run.sh` (it will promt for SNI/user count/etc and install docker/git if needed).
-4. Check the logs via `docker logs -f xtls-proxy` for connection url (see [here](/entrypoint.sh#L48-L55)).
+4. Copy `vless://` link in the `run.sh` terminal after docker startup.
 ```
 ================================================
 XTLS-PROXY Configuration
@@ -23,15 +23,30 @@ Public Key: <PUBKEY>
 URL #1: vless://<UUID>@<Server IP>:443?type=tcp&security=reality&flow=xtls-rprx-vision&pbk=<PUBKEY>&fp=firefox&sni=www.twitch.tv&sid=<SID>&spx=%2F#xtls-proxy
 
 ================================================
-Xray 26.1.23 (Xray, Penetrates Everything.) 0a42dba (go1.25.6 linux/amd64)
-A unified platform for anti-censorship.
 ```
 5. Paste `vless://` link to a client you like.
 6. ...
 7. Profit.
 
+## Image variants and architectures
+
+The default `default` image target uses Alpine 3.23 and supports `linux/amd64` and `linux/arm64`. It does not include `wgcf`. The `warp` target includes `wgcf` and is amd64-only. The setup script builds and runs the selected target automatically; enabling WARP selects `xtls-proxy:warp` and `linux/amd64`.
+
+To build the default image for a specific architecture:
+
+```
+docker build --platform linux/amd64 --target default -t xtls-proxy:latest .
+docker build --platform linux/arm64 --target default -t xtls-proxy:arm64 .
+```
+
+Build the WARP variant on amd64 with:
+
+```
+docker build --platform linux/amd64 --target warp -t xtls-proxy:warp .
+```
+
 ## WARP
 
 In case you're unable to guarantee proper client app configuration for direct access to domestic resources (or in case of censorship from the other side).
 Rigth now this option routes all traffic thru Cloudflare network (see [here](/config.warp.json#L30-L34)), but configure as you see fit.
-Also worth mentioning [wgcf](https://github.com/ViRb3/wgcf).
+The WARP image uses [wgcf](https://github.com/ViRb3/wgcf) to generate its WireGuard profile at startup.
